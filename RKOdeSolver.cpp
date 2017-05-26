@@ -10,6 +10,12 @@ void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[
     return;
 }
 
+double deriv( double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+{
+   double result= con[0]*y[0]*exp(-(y[0]*y[0]+con[1]*con[1]+con[2]*con[2]));
+    return result;
+}
+
 int main()
 {
     double mass = //Need to specify
@@ -50,4 +56,22 @@ int main()
         
         
     }
+	while(t<20){
+	//In X direction
+        con[1] = initY[0];
+        con[2] = initZ[0];
+        double k1 = initX[1];
+	newX[0]=initX[0]+step*k1/2;
+        double k2 = deriv(newX, con);
+	newX[0]=newX[0]+step*k2/2;
+	double k3 = deriv(newX,con);
+	newX[0]=newX[0]+step*k3;
+	double k4 = deriv(newX,con);
+	initX[0]=initX[0]+step*(k1/6+k2/3+k3/3+k4/6);
+	initX[1]=k4;
+
+	
+	
+	}
+	
 }
