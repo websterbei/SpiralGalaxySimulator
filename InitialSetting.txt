@@ -1,0 +1,3 @@
+Circle in XY plane: 1 1 0 0 0.8578 0 0
+Precession pattern: 1 1 0 0 0.5 1 0
+Precession in XY plane: 1 1 -0.1 0 0.5 0 0
