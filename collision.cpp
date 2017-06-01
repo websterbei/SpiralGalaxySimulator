@@ -29,13 +29,16 @@ int main(int argc, char** argv){
     Vz[1] = atof(argv[12]);
     double t = 0;
     bool a = true;
+    int counter = 0;
     ofstream outputFile1;
     outputFile1.open("output1.txt");
     ofstream outputFile2;
     outputFile2.open("output2.txt");
     while(t<20){
+      counter++;
+      if(counter>=1000){counter = 0;
       outputFile1<<x[0]<<" "<<y[0]<<" "<<z[0]<<endl;
-      outputFile2<<x[1]<<" "<<y[1]<<" "<<z[1]<<endl;
+      outputFile1<<x[1]<<" "<<y[1]<<" "<<z[1]<<endl;}
       double r = (x[1]-x[0])*(x[1]-x[0])+(y[1]-y[0])*(y[1]-y[0])+(z[1]-z[0])*(z[1]-z[0]);
       if(r<=4*radius*radius&&a){
         double V1x = (Vx[0]+Vx[1]+lambda*(Vx[1]-Vx[0]))/2;
@@ -59,6 +62,7 @@ int main(int argc, char** argv){
       z[0]+=Vz[0]*step;
       z[1]+=Vz[1]*step;
       t+=step;
+
     }
     outputFile1.close();
     outputFile2.close();
