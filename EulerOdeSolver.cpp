@@ -1,8 +1,9 @@
-#include <iostream>
+#ifndef cmath
 #include <cmath>
-#include <fstream>
+#endif
+#ifndef cstdlib
 #include <cstdlib>
-using namespace std;
+#endif
 
 //con[0] first constant 2/m, con[1] con[2] other coordinates
 void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'

@@ -29,7 +29,7 @@ class Particle
       vy = 0.0l;
       vz = 0.0l;
       dist = 0.0l;
-      r = 0.0l;
+      r = 1.0l;
       lastCoPar = 0;
       lastCoStep = 0;
     }
@@ -43,7 +43,7 @@ class Particle
       this->vy = vy;
       this->vz = vz;
       dist = sqrt(x*x + y*y + z*z);
-      r = 0.0l;
+      r = 1.0l;
       lastCoPar = 0;
       lastCoStep = 0;
     }
@@ -57,7 +57,7 @@ class Particle
       vy = 0.0l;
       vz = 0.0l;
       dist = sqrt(x*x + y*y + z*z);
-      r = 0.0l;
+      r = 1.0l;
       lastCoPar = 0;
       lastCoStep = 0;
     }
