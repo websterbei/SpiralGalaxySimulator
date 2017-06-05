@@ -1,6 +1,7 @@
 #include "particle.h"
 #include "KentSampler.h"
 #include "RKOdeSolver.h"
+#include "collision.h"
 #include <random>
 #include <fstream>
 #include <cstdlib>
@@ -66,11 +67,11 @@ int main()
 
   particles.resize(n); //Resize vector to contain the particles
   double sigma = ceil(R/sqrt(3));
-  mt19937 gen; //Random Number generator
+  mt19937 gen(time(nullptr)); //Random Number generator
   normal_distribution<double> norm = getNorm(sigma); //Normal distribution sampler
   uniform_real_distribution<double> unif = getUnif(); //Uniform real distribution sampler
 
-  for(vector<Particle>::size_type i=0; i<n; i++)
+  for(vector<Particle>::size_type i=1; i<n; i++)
   {
     double tmpX = norm(gen);
     double tmpY = norm(gen);
@@ -80,23 +81,32 @@ int main()
     KentSampler kent = getKent(-tmpY, tmpX, 0, k);
     double tmpV[3];
     double scaleV = unif(gen);
+    cout<<maxV<<endl;
     kent.next(tmpV);
-    Particle newParticle(tmpX, tmpY, tmpZ, tmpV[0]*scaleV, tmpV[1]*scaleV, tmpV[2]*scaleV);
+    Particle newParticle(tmpX, tmpY, tmpZ, maxV*tmpV[0]*scaleV, maxV*tmpV[1]*scaleV, maxV*tmpV[2]*scaleV);
     particles[i] = newParticle;
   }
 
+  particles[0] = Particle(1, 0, 1, 0, 0.5, 0);
   //Iterative update of particle location
   double t = 0.0;
-  double stepSize = 0.001;
+  double tEnd = 1000;
+  double stepSize = 0.01;
   int stepCounter = 0;
-  int avgStepSep = (int)(10000/nPic);
-  while(t<100)
+  int avgStepSep = (int)(tEnd/stepSize/nPic);
+  ofstream test;
+  test.open("output.txt");
+  while(t<tEnd)
   {
     if(stepCounter%avgStepSep==0)
     {
-      string fname = "multiSim" + to_string(stepCounter/avgStepSep);
+      string fname = "./pics/multiSim" + to_string(stepCounter/avgStepSep);
       printToFile(fname);
     }
+
+    int i = 1;
+    test<<particles[i].x<<" "<<particles[i].y<<" "<<particles[i].z<<" "<<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<endl;
+    collide(&particles);
 
     for(vector<Particle>::size_type i=0; i<n; i++)
     {
@@ -105,5 +115,6 @@ int main()
     t+=stepSize;
     stepCounter++;
   }
+  test.close();
   return 0;
 }

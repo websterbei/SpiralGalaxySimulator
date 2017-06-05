@@ -15,7 +15,7 @@ with open(fname, 'r') as f:
         ys.append(float(tmp[1]))
         zs.append(float(tmp[2]))
 
-plotEnd = min(100000, len(xs));
+plotEnd = min(5000, len(xs));
 
 fig = plt.figure()
 ax = fig.add_subplot(2, 2, 1, projection='3d')
@@ -37,4 +37,4 @@ ax.scatter(ys[:plotEnd],zs[:plotEnd], s=1)
 ax.set_xlabel("y")
 ax.set_ylabel("z")
 
-plt.savefig(fname.rstrip("txt")+"jpg")
+plt.savefig(fname.rstrip("txt"))

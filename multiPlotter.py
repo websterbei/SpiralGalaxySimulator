@@ -40,5 +40,5 @@ def plotter(fname):
     plt.savefig(fname.rstrip("txt"))
 
 for i in range(n+1):
-    fname = "multiSim"+str(i);
+    fname = "./pics/multiSim"+str(i);
     plotter(fname)

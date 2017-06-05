@@ -64,7 +64,7 @@ double distance (Particle a, Particle b)
 void collide(vector<Particle> *allParticles)
 {
   vector<Particle> & particles = *allParticles;
-  sort(particles.begin(),particles.end(), Particle);
+  sort(particles.begin(),particles.end());
   for(int i = 0; i<particles.size(); i++)
   {
     int index = i;

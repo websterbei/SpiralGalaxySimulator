@@ -26,6 +26,7 @@ double angle(double ax, double ay, double az, double bx, double by, double bz)
 {
   return acos((ax*bx+ay*by+az*bz)/sqrt((ax*ax+ay*ay+az*az)*(bx*bx+by*by+bz*bz)));
 }
+
 double cosAngle3D(Particle a, Particle b)
 {
   double dx = b.x-a.x;
@@ -80,7 +81,7 @@ double distance (Particle a, Particle b)
 void collide(vector<Particle> *allParticles)
 {
   vector<Particle> & particles = *allParticles;
-  std::sort(particles.begin(),particles.end());
+  sort(particles.begin(),particles.end());
   for(int i = 0; i<particles.size(); i++)
   {
     int index = i;
@@ -117,19 +118,5 @@ void collide(vector<Particle> *allParticles)
     particles[i].lastCoPar = &particles[minIndex];
     particles[minIndex].lastCoPar = &particles[i];
   }
-
-}
-
-
-
-
-int main()
-{ vector<Particle>a(2);
-  a[0]=Particle(0,0,0,3,0,0);
-  a[1]=Particle(1.414,-1.414,-3,0,0);
-  collide(&a);
-  cout<<a[0].vy<<endl;
-
-
 }
 #endif
