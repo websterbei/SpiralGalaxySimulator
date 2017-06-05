@@ -18,6 +18,7 @@ class Particle
     double r; //radius of the particle
     struct Particle *lastCoPar;
     int lastCoStep;
+    bool operator<(const Particle &rhs) const {return x < rhs.x;}
 
   public:
     Particle ()
