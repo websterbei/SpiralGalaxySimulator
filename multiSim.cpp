@@ -90,7 +90,7 @@ int main()
   double stepSize = 0.001;
   int stepCounter = 0;
   int avgStepSep = (int)(10000/nPic);
-  while(t<10)
+  while(t<100)
   {
     if(stepCounter%avgStepSep==0)
     {
