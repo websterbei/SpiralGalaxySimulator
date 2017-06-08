@@ -15,7 +15,7 @@ with open(fname, 'r') as f:
         ys.append(float(tmp[1]))
         zs.append(float(tmp[2]))
 
-plotEnd = min(5000, len(xs));
+plotEnd = min(50000, len(xs));
 
 fig = plt.figure()
 ax = fig.add_subplot(2, 2, 1, projection='3d')

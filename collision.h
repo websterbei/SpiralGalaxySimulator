@@ -78,8 +78,9 @@ double distance (Particle a, Particle b)
   return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)+(a.z-b.z)*(a.z-b.z);
 }
 
-void collide(vector<Particle> *allParticles)
+int collide(vector<Particle> *allParticles)
 {
+  int nCollision = 0;
   vector<Particle> & particles = *allParticles;
   sort(particles.begin(),particles.end());
   for(int i = 0; i<particles.size(); i++)
@@ -114,9 +115,11 @@ void collide(vector<Particle> *allParticles)
       }
     }
     if(minIndex==-1) continue;
+    nCollision++;
     col(&particles[i], &particles[minIndex]);
     particles[i].lastCoPar = &particles[minIndex];
     particles[minIndex].lastCoPar = &particles[i];
   }
+  return nCollision;
 }
 #endif
