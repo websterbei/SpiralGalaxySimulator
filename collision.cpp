@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 #include "particle.h"
 using namespace std;
 
@@ -105,14 +106,28 @@ void collide(vector<Particle> *allParticles)
 }
 
 
-
-
 int main()
-{ vector<Particle>a(2);
+{ 
+  ofstream output;
+  output.open("output.txt");
+  vector<Particle> a(3);
   a[0]=Particle(0,0,0,3,0,0);
-  a[1]=Particle(1.414,-1.414,0,-3,0,0);
-  collide(&a);
-  cout<<a[0].vy<<endl;
-
-
+  a[1]=Particle(5,5,0,-2,-5,0);
+  a[2]=Particle(0,10,0,-3,0,0);
+  double step = 0.01;
+  double t = 0.0;
+  while(t<3) 
+  {
+    collide(&a);
+    output<<a[0].x<<" "<<a[0].y<<" "<<a[0].z<<" "<<a[0].vx<<" "<<a[0].vy<<" "<<a[0].vz<<endl;
+    output<<a[1].x<<" "<<a[1].y<<" "<<a[1].z<<" "<<a[1].vx<<" "<<a[1].vy<<" "<<a[1].vz<<endl;
+    output<<a[2].x<<" "<<a[2].y<<" "<<a[2].z<<" "<<a[2].vx<<" "<<a[2].vy<<" "<<a[2].vz<<endl;
+    a[0].x += a[0].vx*step; a[0].y += a[0].vy*step; a[0].z += a[0].vz*step;
+    a[1].x += a[1].vx*step; a[1].y += a[1].vy*step; a[1].z += a[1].vz*step;
+    a[2].x += a[2].vx*step; a[2].y += a[2].vy*step; a[2].z += a[2].vz*step;
+    cout<<a[0].vx+a[1].vx+a[2].vx<<" "<<a[0].vy+a[1].vy+a[2].vy<<" "<<a[0].vz+a[1].vz+a[2].vz<<endl;
+    t+=step;
+  }
+  output.close();
+  return 0;
 }

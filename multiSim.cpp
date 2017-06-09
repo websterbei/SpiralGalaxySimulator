@@ -12,11 +12,13 @@
 using namespace std;
 
 const double r = 0.1; //particle radius default to 1
-const double k = 2.0; //Parameter for kent distribution, assume k = 2
+const double k = 1000.0; //Parameter for kent distribution, assume k = 2
 const double p = 1000;
 int n = 100; //Number of particles
 int R = 10.0; //Radius of gas cloud
 int nPic = 10; //Number of figs generated
+double lambda = 1.0; //Coefficient of restitution
+double tEnd = 1000;
 
 vector<Particle> particles; //Array of particles
 
@@ -63,6 +65,10 @@ int main()
   cin>>n;
   cout<<"Radius of gas cloud: ";
   cin>>R;
+  cout<<"Coefficient of restitution: ";
+  cin>>lambda;
+  cout<<"Ending time: ";
+  cin>>tEnd;
   cout<<"Number of snapshots: ";
   cin>>nPic;
 
@@ -91,8 +97,7 @@ int main()
   particles[0] = Particle(1, 0, 0, 0, 0.8478, 0);
   //Iterative update of particle location
   double t = 0.0;
-  double tEnd = 1000;
-  double stepSize = 0.001;
+  double stepSize = 0.01;
   int stepCounter = 0;
   int avgStepSep = (int)(tEnd/stepSize/nPic);
   int nCollision = 0;
@@ -116,7 +121,7 @@ int main()
 
     int i = 1;
     test<<particles[i].x<<" "<<particles[i].y<<" "<<particles[i].z<<" "<<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<endl;
-    //nCollision += collide(&particles);
+    nCollision += collide(&particles, lambda);
 
     for(vector<Particle>::size_type i=0; i<n; i++)
     {

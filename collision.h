@@ -54,7 +54,7 @@ void forceVector(double TVector[], double NVector[],  double force, Particle a, 
   NVector[2]=a.vz-TVector[2];
 }
 
-void col(Particle* a, Particle* b)
+void col(Particle* a, Particle* b, double lambda)
 {
   double aTVector[3];
   double aNVector[3];
@@ -65,12 +65,12 @@ void col(Particle* a, Particle* b)
   double bforce = force(*b,ang);
   forceVector(aTVector,aNVector,aforce, *a, *b);
   forceVector(bTVector,bNVector,bforce, *b, *a);
-  a->vx=bTVector[0]+aNVector[0];
-  a->vy=bTVector[1]+aNVector[1];
-  a->vz=bTVector[2]+aNVector[2];
-  b->vx=aTVector[0]+bNVector[0];
-  b->vy=aTVector[1]+bNVector[1];
-  b->vz=aTVector[2]+bNVector[2];
+  a->vx=bTVector[0]*lambda+aNVector[0];
+  a->vy=bTVector[1]*lambda+aNVector[1];
+  a->vz=bTVector[2]*lambda+aNVector[2];
+  b->vx=aTVector[0]*lambda+bNVector[0];
+  b->vy=aTVector[1]*lambda+bNVector[1];
+  b->vz=aTVector[2]*lambda+bNVector[2];
 }
 
 double distance (Particle a, Particle b)
@@ -78,7 +78,7 @@ double distance (Particle a, Particle b)
   return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)+(a.z-b.z)*(a.z-b.z);
 }
 
-int collide(vector<Particle> *allParticles)
+int collide(vector<Particle> *allParticles, double lambda)
 {
   int nCollision = 0;
   vector<Particle> & particles = *allParticles;
@@ -116,7 +116,7 @@ int collide(vector<Particle> *allParticles)
     }
     if(minIndex==-1) continue;
     nCollision++;
-    col(&particles[i], &particles[minIndex]);
+    col(&particles[i], &particles[minIndex], lambda);
     particles[i].lastCoPar = &particles[minIndex];
     particles[minIndex].lastCoPar = &particles[i];
   }
