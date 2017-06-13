@@ -18,6 +18,10 @@
 #include "particle.h"
 #endif
 
+#ifndef algorithm
+#include <algorithm>
+#endif
+
 #ifndef _collision_h
 #define _collision_h
 using namespace std;
