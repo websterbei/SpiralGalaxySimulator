@@ -26,10 +26,15 @@ vector<Particle> particles; //Array of particles
 {
   return -exp(-(x*x+y*y+z*z));
 }*/
-
+/*
 double potential(double x, double y, double z) //Potential function
 {
   return a*(x*x+y*y+z*z)-500;
+}*/
+
+double potential(double x, double y, double z) //Potential function
+{
+  return -1.0/sqrt(x*x+y*y+z*z);
 }
 
 normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
@@ -99,10 +104,10 @@ int main()
     particles[i] = newParticle;
   }
 
-  particles[0] = Particle(1, 0, 0, 0, 1.414, 0);
+  particles[0] = Particle(1, 0, 0, 0, 10, 0);
   //Iterative update of particle location
   double t = 0.0;
-  double stepSize = 0.01;
+  double stepSize = 0.001;
   int stepCounter = 0;
   int avgStepSep = (int)(tEnd/stepSize/nPic);
   int nCollision = 0;
@@ -126,7 +131,7 @@ int main()
 
     int i = 0;
     test<<particles[i].x<<" "<<particles[i].y<<" "<<particles[i].z<<" "<<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<endl;
-    nCollision += collide(&particles, lambda);
+    //nCollision += collide(&particles, lambda);
 
     for(vector<Particle>::size_type i=0; i<n; i++)
     {

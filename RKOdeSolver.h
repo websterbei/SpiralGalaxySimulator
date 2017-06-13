@@ -7,6 +7,9 @@
 #ifndef _particle_h
 #include "particle.h"
 #endif
+#ifndef iostream
+#include <iostream>
+#endif
 
 #ifndef _RKOdeSolver_h
 #define _RKOdeSolver_h
@@ -20,10 +23,17 @@ const double a = 1.0;
     return;
 }*/
 
-void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+/*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
 {
     dydt[0] = y[1];
     dydt[1] = -con[0]*y[0];
+    return;
+}*/
+
+void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+{
+    dydt[0] = y[1];
+    dydt[1] = -con[0]*y[0]*pow((y[0]*y[0]+con[1]*con[1]+con[2]*con[2]), -1.5);
     return;
 }
 
@@ -47,7 +57,7 @@ void solve(Particle *p, double step)
     initZ[1] = p->vz;
 
     //Fixed coefficient
-    con[0] = 2.0*a/mass;
+    con[0] = 1.0/mass;
 
     double dydt[2];
     double newX[2];
@@ -69,13 +79,14 @@ void solve(Particle *p, double step)
     newY[0] = initY[0] + step/2*ky11; //Update y(t)
     double ky12 = dydt[1]; //k1 for second ODE
     newY[1] = initY[1] + step/2*ky12; //Update y'(t)
-    con[1] = initY[0];
-    con[2] = initZ[0];
+    con[1] = initX[0];
+    con[2] = initY[0];
     deri(dydt, initZ, con);
     double kz11 = dydt[0]; //k1 for first ODE
     newZ[0] = initZ[0] + step/2*kz11; //Update z(t)
     double kz12 = dydt[1]; //k1 for second ODE
     newZ[1] = initZ[1] + step/2*kz12; //Update z'(t)
+
     //Update on k2
     con[1] = initY[0];
     con[2] = initZ[0];
@@ -91,13 +102,14 @@ void solve(Particle *p, double step)
     newY[0] = initY[0] + step/2*ky21; //Update y(t)
     double ky22 = dydt[1]; //k2 for second ODE
     newY[1] = initY[1] + step/2*ky22; //Update y'(t)
-    con[1] = initY[0];
-    con[2] = initZ[0];
+    con[1] = initX[0];
+    con[2] = initY[0];
     deri(dydt, newZ, con);
     double kz21 = dydt[0]; //k2 for first ODE
     newZ[0] = initZ[0] + step/2*kz21; //Update z(t)
     double kz22 = dydt[1]; //k2 for second ODE
     newZ[1] = initZ[1] + step/2*kz22; //Update z'(t)
+
     //Update on k3
     con[1] = initY[0];
     con[2] = initZ[0];
@@ -113,13 +125,14 @@ void solve(Particle *p, double step)
     newY[0] = initY[0] + step*ky31; //Update y(t)
     double ky32 = dydt[1]; //k3 for second ODE
     newY[1] = initY[1] + step*ky32; //Update y'(t)
-    con[1] = initY[0];
-    con[2] = initZ[0];
+    con[1] = initX[0];
+    con[2] = initY[0];
     deri(dydt, newZ, con);
     double kz31 = dydt[0]; //k3 for first ODE
     newZ[0] = initZ[0] + step*kz31; //Update z(t)
     double kz32 = dydt[1]; //k3 for second ODE
     newZ[1] = initZ[1] + step*kz32; //Update z'(t)
+
     //Update on k4
     con[1] = initY[0];
     con[2] = initZ[0];
@@ -131,8 +144,8 @@ void solve(Particle *p, double step)
     deri(dydt, newY, con);
     double ky41 = dydt[0]; //k4 for first ODE
     double ky42 = dydt[1]; //k4 for second ODE
-    con[1] = initY[0];
-    con[2] = initZ[0];
+    con[1] = initX[0];
+    con[2] = initY[0];
     deri(dydt, newZ, con);
     double kz41 = dydt[0]; //k4 for first ODE
     double kz42 = dydt[1]; //k4 for second ODE

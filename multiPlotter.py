@@ -15,7 +15,7 @@ def plotter(fname):
             ys.append(float(tmp[1]))
             zs.append(float(tmp[2]))
 
-    plotEnd = min(100000, len(xs));
+    plotEnd = len(xs);
 
     fig = plt.figure()
     ax = fig.add_subplot(2, 2, 1, projection='3d')
