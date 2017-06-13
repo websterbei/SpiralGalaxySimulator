@@ -10,12 +10,20 @@
 
 #ifndef _RKOdeSolver_h
 #define _RKOdeSolver_h
-const double density = 1000;
+const double density = 10;
+const double a = 1.0;
 //con[0] first constant 2/m, con[1] con[2] other coordinates
+/*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+{
+    dydt[0] = y[1];
+    dydt[1] = -con[0]*y[0]/10000*exp(-(y[0]*y[0]+con[1]*con[1]+con[2]*con[2])/10000);
+    return;
+}*/
+
 void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
 {
     dydt[0] = y[1];
-    dydt[1] = -con[0]*y[0]*exp(-(y[0]*y[0]+con[1]*con[1]+con[2]*con[2]));
+    dydt[1] = -con[0]*y[0];
     return;
 }
 
@@ -39,7 +47,7 @@ void solve(Particle *p, double step)
     initZ[1] = p->vz;
 
     //Fixed coefficient
-    con[0] = 2.0/mass;
+    con[0] = 2.0*a/mass;
 
     double dydt[2];
     double newX[2];

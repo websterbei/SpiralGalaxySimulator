@@ -28,14 +28,17 @@ def plotter(fname):
     ax.scatter(xs[:plotEnd],ys[:plotEnd], s=1)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
+    ax.axis([-20, 20, -20, 20])
     ax = fig.add_subplot(2, 2, 3)
     ax.scatter(xs[:plotEnd],zs[:plotEnd], s=1)
     ax.set_xlabel("x")
     ax.set_ylabel("z")
+    ax.axis([-20, 20, -20, 20])
     ax = fig.add_subplot(2, 2, 4)
     ax.scatter(ys[:plotEnd],zs[:plotEnd], s=1)
     ax.set_xlabel("y")
     ax.set_ylabel("z")
+    ax.axis([-20, 20, -20, 20])
 
     plt.savefig(fname.rstrip("txt"))
 

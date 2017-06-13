@@ -13,7 +13,7 @@ using namespace std;
 
 const double r = 0.1; //particle radius default to 1
 const double k = 1000.0; //Parameter for kent distribution, assume k = 2
-const double p = 1000;
+const double p = 10;
 int n = 100; //Number of particles
 int R = 10.0; //Radius of gas cloud
 int nPic = 10; //Number of figs generated
@@ -22,9 +22,14 @@ double tEnd = 1000;
 
 vector<Particle> particles; //Array of particles
 
-double potential(double x, double y, double z) //Potential function
+/*double potential(double x, double y, double z) //Potential function
 {
   return -exp(-(x*x+y*y+z*z));
+}*/
+
+double potential(double x, double y, double z) //Potential function
+{
+  return a*(x*x+y*y+z*z)-500;
 }
 
 normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
@@ -35,7 +40,7 @@ normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 
 uniform_real_distribution<double> getUnif() //Obtain a uniform real distribution
 {
-  uniform_real_distribution<double> distribution(0.0, 1.0);
+  uniform_real_distribution<double> distribution(0.5, 1.0);
   return distribution;
 }
 
@@ -94,7 +99,7 @@ int main()
     particles[i] = newParticle;
   }
 
-  particles[0] = Particle(1, 0, 0, 0, 0.8478, 0);
+  particles[0] = Particle(1, 0, 0, 0, 1.414, 0);
   //Iterative update of particle location
   double t = 0.0;
   double stepSize = 0.01;
@@ -119,7 +124,7 @@ int main()
       */
     }
 
-    int i = 1;
+    int i = 0;
     test<<particles[i].x<<" "<<particles[i].y<<" "<<particles[i].z<<" "<<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<endl;
     nCollision += collide(&particles, lambda);
 
