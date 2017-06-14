@@ -98,7 +98,7 @@ int collide(vector<Particle> *allParticles, double lambda)
       index--;
       if(abs(particles[index].x-particles[i].x) > 4*particles[i].r*particles[i].r) break;
       double dis = distance(particles[i],particles[index]);
-      if(dis <= 4*particles[i].r*particles[i].r && dis < min && particles[i].lastCoPar != &particles[index])
+      if(dis <= 4*particles[i].r*particles[i].r && dis < min && particles[i].lastCoIndex != particles[index].index)
       {
         min = dis;
         minIndex = index;
@@ -112,7 +112,7 @@ int collide(vector<Particle> *allParticles, double lambda)
       index++;
       if(abs(particles[index].x-particles[i].x) > 4*particles[i].r*particles[i].r) break;
       double dis = distance(particles[i],particles[index]);
-      if(dis <= 4*particles[i].r*particles[i].r && dis < min && particles[i].lastCoPar != &particles[index])
+      if(dis <= 4*particles[i].r*particles[i].r && dis < min && particles[i].lastCoIndex != particles[index].index)
       {
         min = dis;
         minIndex = index;
@@ -121,8 +121,8 @@ int collide(vector<Particle> *allParticles, double lambda)
     if(minIndex==-1) continue;
     nCollision++;
     col(&particles[i], &particles[minIndex], lambda);
-    particles[i].lastCoPar = &particles[minIndex];
-    particles[minIndex].lastCoPar = &particles[i];
+    particles[i].lastCoIndex = particles[minIndex].index;
+    particles[minIndex].lastCoIndex = particles[i].index;
   }
   return nCollision;
 }

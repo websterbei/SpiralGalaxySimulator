@@ -27,15 +27,15 @@ vector<Particle> particles; //Array of particles
   return -exp(-(x*x+y*y+z*z));
 }*/
 
-/*double potential(double x, double y, double z) //Potential function
-{
-  return a*(x*x+y*y+z*z)-500;
-}*/
-
 double potential(double x, double y, double z) //Potential function
 {
-  return -1.0/sqrt(x*x+y*y+z*z);
+  return a*(x*x+y*y+z*z)-1000;
 }
+
+/*double potential(double x, double y, double z) //Potential function
+{
+  return -1.0/sqrt(x*x+y*y+z*z);
+}*/
 
 normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 {
@@ -45,7 +45,7 @@ normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 
 uniform_real_distribution<double> getUnif() //Obtain a uniform real distribution
 {
-  uniform_real_distribution<double> distribution(0.8, 1.0);
+  uniform_real_distribution<double> distribution(0.5, 1.0);
   return distribution;
 }
 
@@ -63,7 +63,7 @@ void printToFile(string fname)
   for(vector<Particle>::size_type i=0; i<n; i++)
   {
     outputfile<<particles[i].x<<" "<<particles[i].y<<" "<<particles[i].z<<" "\
-    <<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<endl;
+    <<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<" "<<particles[i].index<<endl;
   }
   outputfile.close();
 }
@@ -82,13 +82,13 @@ int main()
   cout<<"Number of snapshots: ";
   cin>>nPic;
 
-  particles.resize(n); //Resize vector to contain the particles
+  particles = vector<Particle>(n); //Resize vector to contain the particles
   double sigma = ceil(R/sqrt(3));
   mt19937 gen(time(nullptr)); //Random Number generator
   normal_distribution<double> norm = getNorm(sigma); //Normal distribution sampler
   uniform_real_distribution<double> unif = getUnif(); //Uniform real distribution sampler
 
-  for(vector<Particle>::size_type i=1; i<n; i++)
+  for(vector<Particle>::size_type i=0; i<n-1; i++)
   {
     double tmpX = norm(gen);
     double tmpY = norm(gen);
@@ -100,11 +100,10 @@ int main()
     double scaleV = unif(gen);
     //cout<<maxV<<endl;
     kent.next(tmpV);
-    Particle newParticle(tmpX, tmpY, tmpZ, maxV*tmpV[0]*scaleV, maxV*tmpV[1]*scaleV, maxV*tmpV[2]*scaleV);
-    particles[i] = newParticle;
+    particles[i].setParticle(tmpX, tmpY, tmpZ, maxV*tmpV[0]*scaleV, maxV*tmpV[1]*scaleV, maxV*tmpV[2]*scaleV);
   }
 
-  particles[0] = Particle(1, 0, 0, 0, 1.414, 0);
+  particles[n-1].setParticle(1, 0, 0, 0, 14.14, 0);
   //Iterative update of particle location
   double t = 0.0;
   double stepSize = 0.01;
@@ -113,6 +112,9 @@ int main()
   int nCollision = 0;
   ofstream test;
   test.open("output.txt");
+
+  Particle *ptc = &particles[1];
+
   while(t<tEnd)
   {
     if(stepCounter%avgStepSep==0)
@@ -129,8 +131,7 @@ int main()
       */
     }
 
-    int i = 0;
-    test<<particles[i].x<<" "<<particles[i].y<<" "<<particles[i].z<<" "<<particles[i].vx<<" "<<particles[i].vy<<" "<<particles[i].vz<<endl;
+    test<<ptc->x<<" "<<ptc->y<<" "<<ptc->z<<" "<<ptc->vx<<" "<<ptc->vy<<" "<<ptc->vz<<endl;
     nCollision += collide(&particles, lambda);
 
     for(vector<Particle>::size_type i=0; i<n; i++)

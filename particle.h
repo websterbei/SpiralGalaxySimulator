@@ -16,7 +16,9 @@ class Particle
     double vz;
     double dist; //Distance from center
     double r; //radius of the particle
-    struct Particle *lastCoPar;
+    int lastCoIndex;
+    int index;
+    static int indexer;
     int lastCoStep;
     bool operator<(const Particle &rhs) const {return x < rhs.x;}
 
@@ -31,8 +33,9 @@ class Particle
       vz = 0.0l;
       dist = 0.0l;
       r = 0.1l;
-      lastCoPar = 0;
+      lastCoIndex = 0;
       lastCoStep = 0;
+      index = ++indexer;
     }
 
     Particle (double x, double y, double z, double vx, double vy, double vz)
@@ -45,8 +48,9 @@ class Particle
       this->vz = vz;
       dist = sqrt(x*x + y*y + z*z);
       r = 0.1l;
-      lastCoPar = 0;
+      lastCoIndex = 0;
       lastCoStep = 0;
+      index = ++indexer;
     }
 
     Particle (double x, double y, double z)
@@ -59,10 +63,27 @@ class Particle
       vz = 0.0l;
       dist = sqrt(x*x + y*y + z*z);
       r = 0.1l;
-      lastCoPar = 0;
+      lastCoIndex = 0;
+      lastCoStep = 0;
+      index = ++indexer;
+    }
+
+    void setParticle (double x, double y, double z, double vx, double vy, double vz)
+    {
+      this->x = x;
+      this->y = y;
+      this->z = z;
+      this->vx = vx;
+      this->vy = vy;
+      this->vz = vz;
+      dist = sqrt(x*x + y*y + z*z);
+      r = 0.1l;
+      lastCoIndex = 0;
       lastCoStep = 0;
     }
 
 };
+
+int Particle::indexer = 0;
 
 #endif

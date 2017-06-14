@@ -20,22 +20,19 @@ const double a = 1.0;
 {
     dydt[0] = y[1];
     dydt[1] = -con[0]*y[0]/10000*exp(-(y[0]*y[0]+con[1]*con[1]+con[2]*con[2])/10000);
-    return;
-}*/
-
-/*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
-{
-    dydt[0] = y[1];
-    dydt[1] = -con[0]*y[0];
-    return;
 }*/
 
 void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
 {
     dydt[0] = y[1];
-    dydt[1] = -con[0]*y[0]*pow((y[0]*y[0]+con[1]*con[1]+con[2]*con[2]), -1.5);
-    return;
+    dydt[1] = -con[0]*y[0];
 }
+
+/*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+{
+    dydt[0] = y[1];
+    dydt[1] = -con[0]*y[0]*pow((y[0]*y[0]+con[1]*con[1]+con[2]*con[2]), -1.5);
+}*/
 
 void solve(Particle *p, double step)
 {
@@ -57,7 +54,7 @@ void solve(Particle *p, double step)
     initZ[1] = p->vz;
 
     //Fixed coefficient
-    con[0] = 1.0/mass;
+    con[0] = 2.0*a/mass;
 
     double dydt[2];
     double newX[2];
