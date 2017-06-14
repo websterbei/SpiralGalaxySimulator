@@ -11,9 +11,9 @@
 #include <iostream>
 using namespace std;
 
-const double r = 0.1; //particle radius default to 1
+const double r = 0.5; //particle radius default to 1
 const double k = 1000.0; //Parameter for kent distribution, assume k = 2
-const double p = 10;
+const double p = 0.1;
 int n = 100; //Number of particles
 int R = 10.0; //Radius of gas cloud
 int nPic = 10; //Number of figs generated
@@ -113,8 +113,6 @@ int main()
   ofstream test;
   test.open("output.txt");
 
-  Particle *ptc = &particles[1];
-
   while(t<tEnd)
   {
     if(stepCounter%avgStepSep==0)
@@ -130,8 +128,18 @@ int main()
       cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
       */
     }
+    /*
+    for(vector<Particle>::size_type i=0; i<n; i++)
+    {
+      if(particles[i].index == n-2)
+      {
+        Particle *ptc = &particles[i];
+        test<<ptc->x<<" "<<ptc->y<<" "<<ptc->z<<" "<<ptc->vx<<" "<<ptc->vy<<" "<<ptc->vz<<endl;
+        break;
+      }
+    }
+    */
 
-    test<<ptc->x<<" "<<ptc->y<<" "<<ptc->z<<" "<<ptc->vx<<" "<<ptc->vy<<" "<<ptc->vz<<endl;
     nCollision += collide(&particles, lambda);
 
     for(vector<Particle>::size_type i=0; i<n; i++)

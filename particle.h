@@ -32,7 +32,7 @@ class Particle
       vy = 0.0l;
       vz = 0.0l;
       dist = 0.0l;
-      r = 0.1l;
+      r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
       index = ++indexer;
@@ -47,7 +47,7 @@ class Particle
       this->vy = vy;
       this->vz = vz;
       dist = sqrt(x*x + y*y + z*z);
-      r = 0.1l;
+      r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
       index = ++indexer;
@@ -62,7 +62,7 @@ class Particle
       vy = 0.0l;
       vz = 0.0l;
       dist = sqrt(x*x + y*y + z*z);
-      r = 0.1l;
+      r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
       index = ++indexer;
@@ -77,7 +77,7 @@ class Particle
       this->vy = vy;
       this->vz = vz;
       dist = sqrt(x*x + y*y + z*z);
-      r = 0.1l;
+      r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
     }
