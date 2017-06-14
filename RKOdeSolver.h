@@ -13,7 +13,7 @@
 
 #ifndef _RKOdeSolver_h
 #define _RKOdeSolver_h
-const double density = 0.1;
+
 const double a = 1.0;
 //con[0] first constant 2/m, con[1] con[2] other coordinates
 /*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
@@ -45,7 +45,7 @@ void solve(Particle *p, double step)
     //Initialize
 
     //Initial Condition
-    double mass = density*p->r*p->r*p->r;
+    double mass = p->mass;
     initX[0] = p->x;
     initX[1] = p->vx;
     initY[0] = p->y;

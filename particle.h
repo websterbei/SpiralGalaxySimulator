@@ -14,7 +14,7 @@ class Particle
     double vx;
     double vy;
     double vz;
-    double dist; //Distance from center
+    double mass;
     double r; //radius of the particle
     int lastCoIndex;
     int index;
@@ -31,7 +31,6 @@ class Particle
       vx = 0.0l;
       vy = 0.0l;
       vz = 0.0l;
-      dist = 0.0l;
       r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
@@ -46,7 +45,6 @@ class Particle
       this->vx = vx;
       this->vy = vy;
       this->vz = vz;
-      dist = sqrt(x*x + y*y + z*z);
       r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
@@ -61,7 +59,6 @@ class Particle
       vx = 0.0l;
       vy = 0.0l;
       vz = 0.0l;
-      dist = sqrt(x*x + y*y + z*z);
       r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
@@ -76,10 +73,19 @@ class Particle
       this->vx = vx;
       this->vy = vy;
       this->vz = vz;
-      dist = sqrt(x*x + y*y + z*z);
       r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
+    }
+
+    void setRadius (double r)
+    {
+      this->r = r;
+    }
+
+    void setMass (double mass)
+    {
+      this->mass = mass;
     }
 
 };

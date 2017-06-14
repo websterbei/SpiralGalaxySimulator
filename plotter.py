@@ -2,7 +2,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import sys
 
-fname = sys.argv[1]
+defEnd = 999999999
+if len(sys.argv)>1:
+	defEnd = int(sys.argv[1])
+
+fname = "output.txt"
 
 xs = []
 ys = []
@@ -15,7 +19,7 @@ with open(fname, 'r') as f:
         ys.append(float(tmp[1]))
         zs.append(float(tmp[2]))
 
-plotEnd = min(50000, len(xs));
+plotEnd = min(defEnd, len(xs));
 
 fig = plt.figure()
 ax = fig.add_subplot(2, 2, 1, projection='3d')
