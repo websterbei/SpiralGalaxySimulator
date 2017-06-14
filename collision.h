@@ -70,12 +70,14 @@ void col(Particle* a, Particle* b, double lambda)
   double bforce = force(*b, angB);
   forceVector(aTVector, aNVector, aforce, *a, *b);
   forceVector(bTVector, bNVector, bforce, *b, *a);
-  a->vx=bTVector[0]*lambda+aNVector[0];
-  a->vy=bTVector[1]*lambda+aNVector[1];
-  a->vz=bTVector[2]*lambda+aNVector[2];
-  b->vx=aTVector[0]*lambda+bNVector[0];
-  b->vy=aTVector[1]*lambda+bNVector[1];
-  b->vz=aTVector[2]*lambda+bNVector[2];
+
+  a->vx=0.5*(aTVector[0]+bTVector[0]+lambda*(bTVector[0]-aTVector[0]))+aNVector[0];
+  a->vy=0.5*(aTVector[1]+bTVector[1]+lambda*(bTVector[1]-aTVector[1]))+aNVector[1];
+  a->vz=0.5*(aTVector[2]+bTVector[2]+lambda*(bTVector[2]-aTVector[2]))+aNVector[2];
+  b->vx=0.5*(aTVector[0]+bTVector[0]+lambda*(aTVector[0]-bTVector[0]))+bNVector[0];
+  b->vy=0.5*(aTVector[1]+bTVector[1]+lambda*(aTVector[1]-bTVector[1]))+bNVector[1];
+  b->vz=0.5*(aTVector[2]+bTVector[2]+lambda*(aTVector[2]-bTVector[2]))+bNVector[2];
+
 }
 
 double distance2 (Particle a, Particle b)
