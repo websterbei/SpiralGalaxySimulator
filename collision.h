@@ -64,11 +64,12 @@ void col(Particle* a, Particle* b, double lambda)
   double aNVector[3];
   double bTVector[3];
   double bNVector[3];
-  double ang = cosAngle3D(*a, *b);
-  double aforce = force(*a,ang);
-  double bforce = force(*b,ang);
-  forceVector(aTVector,aNVector,aforce, *a, *b);
-  forceVector(bTVector,bNVector,bforce, *b, *a);
+  double angA = cosAngle3D(*a, *b);
+  double angB = cosAngle3D(*b, *a);
+  double aforce = force(*a, angA);
+  double bforce = force(*b, angB);
+  forceVector(aTVector, aNVector, aforce, *a, *b);
+  forceVector(bTVector, bNVector, bforce, *b, *a);
   a->vx=bTVector[0]*lambda+aNVector[0];
   a->vy=bTVector[1]*lambda+aNVector[1];
   a->vz=bTVector[2]*lambda+aNVector[2];
@@ -77,7 +78,7 @@ void col(Particle* a, Particle* b, double lambda)
   b->vz=aTVector[2]*lambda+bNVector[2];
 }
 
-double distance (Particle a, Particle b)
+double distance2 (Particle a, Particle b)
 {
   return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)+(a.z-b.z)*(a.z-b.z);
 }
@@ -96,9 +97,10 @@ int collide(vector<Particle> *allParticles, double lambda)
     {
       if(index-1<0) break;
       index--;
-      if(abs(particles[index].x-particles[i].x) > 4*particles[i].r*particles[i].r) break;
-      double dis = distance(particles[i],particles[index]);
-      if(dis <= 4*particles[i].r*particles[i].r && dis < min && particles[i].lastCoIndex != particles[index].index)
+      if(abs(particles[index].x-particles[i].x) > 2*particles[i].r) break;
+      double dis = distance2(particles[i], particles[index]);
+      if(dis <= 4*particles[i].r*particles[i].r && dis < min &&
+        !((particles[i].lastCoIndex == particles[index].index)&&(particles[index].lastCoIndex == particles[i].index)))
       {
         min = dis;
         minIndex = index;
@@ -110,14 +112,16 @@ int collide(vector<Particle> *allParticles, double lambda)
     {
       if(index+1 >= particles.size()) break;
       index++;
-      if(abs(particles[index].x-particles[i].x) > 4*particles[i].r*particles[i].r) break;
-      double dis = distance(particles[i],particles[index]);
-      if(dis <= 4*particles[i].r*particles[i].r && dis < min && particles[i].lastCoIndex != particles[index].index)
+      if(abs(particles[index].x-particles[i].x) > 2*particles[i].r) break;
+      double dis = distance2(particles[i], particles[index]);
+      if(dis <= 4*particles[i].r*particles[i].r && dis < min &&
+        !((particles[i].lastCoIndex == particles[index].index)&&(particles[index].lastCoIndex == particles[i].index)))
       {
         min = dis;
         minIndex = index;
       }
     }
+
     if(minIndex==-1) continue;
     nCollision++;
     col(&particles[i], &particles[minIndex], lambda);

@@ -93,6 +93,9 @@ int main()
     {
       string fname = "./pics/multiSim" + to_string(stepCounter/avgStepSep);
       printToFile(fname);
+      double z[3];
+      totAngMom(z);
+      cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
     }
     //Collision
     nCollision += collide(&particles, lambda);
