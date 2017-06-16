@@ -33,6 +33,7 @@ KentSampler getKent(double x, double y, double z, double k);
 void printToFile(string fname);
 void singleTest(ofstream *file);
 void totAngMom(double z[]);
+void optimalTest();
 
 //Simulation
 int main()
@@ -87,7 +88,7 @@ int main()
   while(t<tEnd)
   {
     //Single Particle
-    singleTest(&test);
+    //singleTest(&test);
     //Print
     if(stepCounter%avgStepSep==0)
     {
@@ -96,6 +97,7 @@ int main()
       double z[3];
       totAngMom(z);
       cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
+      optimalTest();
     }
     //Collision
     nCollision += collide(&particles, lambda);
@@ -118,15 +120,15 @@ int main()
   return -exp(-(x*x+y*y+z*z));
 }*/
 
-double potential(double x, double y, double z) //Potential function
-{
-  return a*(x*x+y*y+z*z)-1000;
-}
-
 /*double potential(double x, double y, double z) //Potential function
 {
-  return -1.0/sqrt(x*x+y*y+z*z);
+  return a*(x*x+y*y+z*z)-1000;
 }*/
+
+double potential(double x, double y, double z) //Potential function
+{
+  return -1.0/sqrt(x*x+y*y+z*z);
+}
 
 normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 {
@@ -182,4 +184,24 @@ void singleTest(ofstream *file)
       break;
     }
   }
+}
+
+void optimalTest() //For -1/r well
+{
+  double optimFactor = 0.0;
+  int counter = 0;
+    for(int i = 0; i < particles.size(); i ++)
+    {
+      double rad = sqrt(particles[i].x*particles[i].x + particles[i].y*particles[i].y + particles[i].z*particles[i].z);
+      double v2 = particles[i].vx*particles[i].vx + particles[i].vy*particles[i].vy + particles[i].vz*particles[i].vz;
+      double totE = potential(particles[i].x, particles[i].y, particles[i].z) + 0.5*mass*v2;
+      double maxR = -0.5/totE;
+      if(maxR>=0) counter++;
+      else continue;
+      //cout<<maxR<<endl;
+      double lZ = particles[i].x*particles[i].vy-particles[i].vx*particles[i].y;
+      //cout<<totE-potential(maxR, 0, 0)<<endl;
+      optimFactor+=lZ/maxR/sqrt(2*(totE-potential(maxR, 0, 0)/mass));
+    }
+    cout<<optimFactor/counter<<endl;
 }
