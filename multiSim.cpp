@@ -9,7 +9,6 @@
 #include <cmath>
 #include <string>
 #include <iostream>
-#include <thread>
 using namespace std;
 
 //Constant declaration
@@ -36,7 +35,6 @@ void singleTest(ofstream *file);
 void totAngMom(double z[]);
 void optimalTest();
 void avgKEPE(double *Kinetic, double *Potential);
-void RK4Thread(int start, int end, double stepSize);
 
 //Simulation
 int main()
@@ -85,8 +83,6 @@ int main()
   int stepCounter = 0;
   int avgStepSep = (int)(tEnd/stepSize/nPic);
   int nCollision = 0;
-  int nThread = 4;
-  thread thrd[nThread];
   ofstream test;
   test.open("output.txt");
 
@@ -110,15 +106,9 @@ int main()
     //Collision
     //nCollision += collide(&particles, lambda);
     //RK4
-    for(int j=0;j<nThread;++j)
+    for(vector<Particle>::size_type i=0; i<n; i++)
     {
-      int start = (int)ceil(n/nThread)*j;
-      int end = min((int)ceil(n/nThread)*(j+1)-1, n);
-      thrd[j] = thread(RK4Thread, start, end, stepSize);
-    }
-    for(int j=0;j<nThread;++j)
-    {
-      thrd[j].join();
+      solve(&particles[i], stepSize);
     }
 
     t+=stepSize;
@@ -234,9 +224,4 @@ void avgKEPE(double *Kinetic, double *Potential) //Average kinetic energy
       PE+=tmpPE;
     }
   }
-}
-
-void RK4Thread(int start, int end, double stepSize)
-{
-  for(int i=start;i<end;++i) solve(&particles[i], stepSize);
 }
