@@ -34,6 +34,7 @@ void printToFile(string fname);
 void singleTest(ofstream *file);
 void totAngMom(double z[]);
 void optimalTest();
+void avgKEPE(double *Kinetic, double *Potential);
 
 //Simulation
 int main()
@@ -58,7 +59,7 @@ int main()
 
   for(vector<Particle>::size_type i=0; i<n-1; i++)
   {
-    double tmpX = norm(gen);
+    double tmpX = norm(gen)*2;
     double tmpY = norm(gen);
     double tmpZ = norm(gen);
     double pot = potential(tmpX, tmpY, tmpZ); //Calculate potential energy
@@ -98,6 +99,9 @@ int main()
       totAngMom(z);
       cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
       optimalTest();
+      double KE,PE;
+      avgKEPE(&KE, &PE);
+      cout<<KE*2<<" "<<PE<<endl;
     }
     //Collision
     nCollision += collide(&particles, lambda);
@@ -138,7 +142,7 @@ normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 
 uniform_real_distribution<double> getUnif() //Obtain a uniform real distribution
 {
-  uniform_real_distribution<double> distribution(0.5, 1.0);
+  uniform_real_distribution<double> distribution(0, 1.0);
   return distribution;
 }
 
@@ -204,4 +208,20 @@ void optimalTest() //For -1/r well
       optimFactor+=lZ/maxR/sqrt(2*(totE-potential(maxR, 0, 0)/mass));
     }
     cout<<optimFactor/counter<<endl;
+}
+
+void avgKEPE(double *Kinetic, double *Potential) //Average kinetic energy
+{
+  double &KE = *Kinetic;
+  double &PE = *Potential;
+  for(int i=0;i<particles.size();i++)
+  {
+    double tmpKE = 0.5*mass*(particles[i].vx*particles[i].vx+particles[i].vy*particles[i].vy+particles[i].vz*particles[i].vz);
+    double tmpPE = potential(particles[i].x, particles[i].y, particles[i].z);
+    if(tmpKE+tmpPE<0)
+    {
+      KE+=tmpKE;
+      PE+=tmpPE;
+    }
+  }
 }
