@@ -59,7 +59,7 @@ int main()
 
   for(vector<Particle>::size_type i=0; i<n-1; i++)
   {
-    double tmpX = norm(gen)*2;
+    double tmpX = norm(gen);
     double tmpY = norm(gen);
     double tmpZ = norm(gen);
     double pot = potential(tmpX, tmpY, tmpZ); //Calculate potential energy
@@ -79,7 +79,7 @@ int main()
 
   //Iterative update of particle location
   double t = 0.0;
-  double stepSize = 0.01;
+  double stepSize = 0.001;
   int stepCounter = 0;
   int avgStepSep = (int)(tEnd/stepSize/nPic);
   int nCollision = 0;
@@ -98,10 +98,10 @@ int main()
       double z[3];
       totAngMom(z);
       cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
-      optimalTest();
-      double KE,PE;
-      avgKEPE(&KE, &PE);
-      cout<<KE*2<<" "<<PE<<endl;
+      //optimalTest();
+      //double KE,PE;
+      //avgKEPE(&KE, &PE);
+      //cout<<KE*2<<" "<<PE<<endl;
     }
     //Collision
     nCollision += collide(&particles, lambda);
