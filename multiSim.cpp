@@ -104,7 +104,7 @@ int main()
       //cout<<KE*2<<" "<<PE<<endl;
     }
     //Collision
-    nCollision += collide(&particles, lambda);
+    //nCollision += collide(&particles, lambda);
     //RK4
     for(vector<Particle>::size_type i=0; i<n; i++)
     {
