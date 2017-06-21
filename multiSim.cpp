@@ -115,7 +115,7 @@ int main()
       //cout<<KE*2<<" "<<PE<<endl;
     }
     //Collision
-    //nCollision += collide(&particles, lambda);
+    nCollision += collide(&particles, lambda);
     //update TE after collision
     for(int i=0;i<n;++i)
     {

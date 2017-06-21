@@ -17,6 +17,7 @@ class Particle
     double r; //radius of the particle
     double TE; //total energy
     bool collided;
+    bool trapped;
     int lastCoIndex;
     int index;
     static int indexer;
@@ -37,6 +38,7 @@ class Particle
       lastCoStep = 0;
       index = ++indexer;
       collided = false;
+      trapped = false;
     }
 
     void setParticle (double x, double y, double z, double vx, double vy, double vz)
@@ -51,6 +53,7 @@ class Particle
       lastCoIndex = 0;
       lastCoStep = 0;
       collided = false;
+      trapped = false;
     }
 
     void setRadius (double r)
@@ -70,21 +73,16 @@ class Particle
 
     void vCorrection (double (*potential) (double, double, double))
     {
-      if(!collided)
-      {
         double PE = (*potential)(x, y, z)*mass;
         double oldKE = TE - PE;
-        if(oldKE<0) std::cout<<"oldKE: "<<oldKE<<std::endl;
+        if(oldKE<0) std::cout<<"oldKE: "<<oldKE<<" "<<x<<" "<<y<<" "<<z<<std::endl;
         double curKE = 0.5*mass*(vx*vx+vy*vy+vz*vz);
         double cFactor = sqrt(oldKE/curKE);
         vx*=cFactor;
         vy*=cFactor;
         vz*=cFactor;
-      }
-      else
-      {
-        collided = false;
-      }
+        double rad = sqrt(x*x+y*y+z*z);
+        if(rad<0.5) trapped = true;
     }
 
     void updateTE (double (*potential) (double, double, double))
@@ -92,6 +90,7 @@ class Particle
       double PE = (*potential)(x, y, z)*mass;
       double curKE = 0.5*mass*(vx*vx+vy*vy+vz*vz);
       TE = PE + curKE;
+      collided = false;
     }
 };
 

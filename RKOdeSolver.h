@@ -28,6 +28,7 @@ void deri(double dydt[], double y[], double con[], bool x) //dydt[0] y', dydt[1]
 
 void solve(Particle *p, double step, double (*potential) (double, double, double))
 {
+    if(p->trapped) return;
     //init*[0] value, init*[1] first order derivative
     double initX[2];
     double initY[2];
