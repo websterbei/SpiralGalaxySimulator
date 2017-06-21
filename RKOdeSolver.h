@@ -1,15 +1,7 @@
-#ifndef cmath
-#include <cmath>
-#endif
-#ifndef cstdlib
-#include <cstdlib>
-#endif
-#ifndef _particle_h
 #include "particle.h"
-#endif
-#ifndef iostream
 #include <iostream>
-#endif
+#include <cmath>
+#include <cstdlib>
 
 #ifndef _RKOdeSolver_h
 #define _RKOdeSolver_h
@@ -34,7 +26,7 @@ void deri(double dydt[], double y[], double con[], bool x) //dydt[0] y', dydt[1]
     dydt[1] = x ? -con[0]*y[0]/4*pow((y[0]*y[0]/4+con[1]*con[1]+con[2]*con[2]), -1.5) : -con[0]*y[0]*pow((y[0]*y[0]+con[1]*con[1]+con[2]*con[2]), -1.5);
 }
 
-void solve(Particle *p, double step)
+void solve(Particle *p, double step, double (*potential) (double, double, double))
 {
     //init*[0] value, init*[1] first order derivative
     double initX[2];
@@ -45,7 +37,6 @@ void solve(Particle *p, double step)
     //Initialize
 
     //Initial Condition
-    double mass = p->mass;
     initX[0] = p->x;
     initX[1] = p->vx;
     initY[0] = p->y;
@@ -54,7 +45,7 @@ void solve(Particle *p, double step)
     initZ[1] = p->vz;
 
     //Fixed coefficient
-    con[0] = 1.0/mass;
+    con[0] = 1.0;
 
     double dydt[2];
     double newX[2];
@@ -154,6 +145,7 @@ void solve(Particle *p, double step)
     p->vy = initY[1] + step*(ky12/6 + ky22/3 + ky32/3 + ky42/6);
     p->z = initZ[0] + step*(kz11/6 + kz21/3 + kz31/3 + kz41/6);
     p->vz = initZ[1] + step*(kz12/6 + kz22/3 + kz32/3 + kz42/6);
+    p->vCorrection(potential);
 }
 
 #endif

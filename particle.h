@@ -1,6 +1,5 @@
-#ifndef cmath
 #include <cmath>
-#endif
+#include <iostream>
 
 #ifndef _particle_h
 #define _particle_h
@@ -16,6 +15,8 @@ class Particle
     double vz;
     double mass;
     double r; //radius of the particle
+    double TE; //total energy
+    bool collided;
     int lastCoIndex;
     int index;
     static int indexer;
@@ -35,34 +36,7 @@ class Particle
       lastCoIndex = 0;
       lastCoStep = 0;
       index = ++indexer;
-    }
-
-    Particle (double x, double y, double z, double vx, double vy, double vz)
-    {
-      this->x = x;
-      this->y = y;
-      this->z = z;
-      this->vx = vx;
-      this->vy = vy;
-      this->vz = vz;
-      r = 0.5l;
-      lastCoIndex = 0;
-      lastCoStep = 0;
-      index = ++indexer;
-    }
-
-    Particle (double x, double y, double z)
-    {
-      this->x = x;
-      this->y = y;
-      this->z = z;
-      vx = 0.0l;
-      vy = 0.0l;
-      vz = 0.0l;
-      r = 0.5l;
-      lastCoIndex = 0;
-      lastCoStep = 0;
-      index = ++indexer;
+      collided = false;
     }
 
     void setParticle (double x, double y, double z, double vx, double vy, double vz)
@@ -76,6 +50,7 @@ class Particle
       r = 0.5l;
       lastCoIndex = 0;
       lastCoStep = 0;
+      collided = false;
     }
 
     void setRadius (double r)
@@ -88,6 +63,36 @@ class Particle
       this->mass = mass;
     }
 
+    void setTE (double TE)
+    {
+      this->TE = TE;
+    }
+
+    void vCorrection (double (*potential) (double, double, double))
+    {
+      if(!collided)
+      {
+        double PE = (*potential)(x, y, z)*mass;
+        double oldKE = TE - PE;
+        if(oldKE<0) std::cout<<"oldKE: "<<oldKE<<std::endl;
+        double curKE = 0.5*mass*(vx*vx+vy*vy+vz*vz);
+        double cFactor = sqrt(oldKE/curKE);
+        vx*=cFactor;
+        vy*=cFactor;
+        vz*=cFactor;
+      }
+      else
+      {
+        collided = false;
+      }
+    }
+
+    void updateTE (double (*potential) (double, double, double))
+    {
+      double PE = (*potential)(x, y, z)*mass;
+      double curKE = 0.5*mass*(vx*vx+vy*vy+vz*vz);
+      TE = PE + curKE;
+    }
 };
 
 int Particle::indexer = 0;

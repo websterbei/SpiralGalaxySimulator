@@ -1,26 +1,9 @@
-#ifndef cmath
 #include <cmath>
-#endif
-
-#ifndef vector
 #include <vector>
-#endif
-
-#ifndef cstdlib
 #include <cstdlib>
-#endif
-
-#ifndef iostream
 #include <iostream>
-#endif
-
-#ifndef _particle_h
-#include "particle.h"
-#endif
-
-#ifndef algorithm
 #include <algorithm>
-#endif
+#include "particle.h"
 
 #ifndef _collision_h
 #define _collision_h
@@ -129,6 +112,8 @@ int collide(vector<Particle> *allParticles, double lambda)
     col(&particles[i], &particles[minIndex], lambda);
     particles[i].lastCoIndex = particles[minIndex].index;
     particles[minIndex].lastCoIndex = particles[i].index;
+    particles[i].collided = true;
+    particles[minIndex].collided = true;
   }
   return nCollision;
 }
