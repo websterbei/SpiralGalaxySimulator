@@ -84,12 +84,13 @@ int main()
 
   //Iterative update of particle location
   double t = 0.0;
-  double stepSize = 0.001;
+  double stepSize = 0.01;
   int stepCounter = 0;
   int avgStepSep = (int)(tEnd/stepSize/nPic);
   int nCollision = 0;
   int nThread = 4;
   int oldNCollision = 0;
+  double oldTE =0;
   thread thrd[nThread];
   ofstream test;
   test.open("output.txt");
@@ -109,7 +110,8 @@ int main()
       //optimalTest();
       //cout<<nCollision - oldNCollision<<endl;
       //oldNCollision = nCollision;
-      cout<<totE()<<endl;
+      cout<<totE()-oldTE<<endl;
+      oldTE=totE();
       //double KE,PE;
       //avgKEPE(&KE, &PE);
       //cout<<KE*2<<" "<<PE<<endl;
@@ -119,6 +121,10 @@ int main()
     //update TE after collision
     for(int i=0;i<n;++i)
     {
+      if(particles[i].TE>0){
+        // cout<<to_string(particles[i].vx)+" "<<to_string(particles[i].vy)+" "<<particles[i].vz<<endl;
+        // return 0;
+    }
       if(particles[i].collided) particles[i].updateTE(&potential);
     }
     //RK4
@@ -225,7 +231,7 @@ void optimalTest() //For -1/r well
       double rad = sqrt(particles[i].x*particles[i].x + particles[i].y*particles[i].y + particles[i].z*particles[i].z);
       double v2 = particles[i].vx*particles[i].vx + particles[i].vy*particles[i].vy + particles[i].vz*particles[i].vz;
       double totE = mass*potential(particles[i].x, particles[i].y, particles[i].z) + 0.5*mass*v2;
-      double maxR = -mass/totE;
+      double maxR = -mass/totE/2;
       if(maxR>=0) counter++;
       else continue;
       //cout<<maxR<<endl;
