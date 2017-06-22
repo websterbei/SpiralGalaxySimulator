@@ -13,7 +13,7 @@
 using namespace std;
 
 //Constant declaration
-const double r = 0.5; //particle radius default to 1
+const double r = 0.3; //particle radius default to 1
 const double k = 1000.0; //Parameter for kent distribution, assume k = 2
 const double density = 0.1;
 int n = 100; //Number of particles
@@ -84,7 +84,7 @@ int main()
 
   //Iterative update of particle location
   double t = 0.0;
-  double stepSize = 0.001;
+  double stepSize = 0.01;
   int stepCounter = 0;
   int avgStepSep = (int)(tEnd/stepSize/nPic);
   int nCollision = 0;
@@ -106,10 +106,10 @@ int main()
       double z[3];
       //totAngMom(z);
       //cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
-      //optimalTest();
-      //cout<<nCollision - oldNCollision<<endl;
-      //oldNCollision = nCollision;
-      cout<<totE()<<endl;
+      optimalTest();
+      cout<<nCollision - oldNCollision<<endl;
+      oldNCollision = nCollision;
+      //cout<<nCollision<<endl;
       //double KE,PE;
       //avgKEPE(&KE, &PE);
       //cout<<KE*2<<" "<<PE<<endl;
@@ -141,20 +141,20 @@ int main()
   return 0;
 }
 
-/*double potential(double x, double y, double z) //Potential function
+double potential(double x, double y, double z) //Potential function
 {
-  return -exp(-(x*x+y*y+z*z));
-}*/
+  return -exp(-(x*x+y*y+z*z)/100);
+}
 
 /*double potential(double x, double y, double z) //Potential function
 {
   return a*(x*x+y*y+z*z)-1000;
 }*/
 
-double potential(double x, double y, double z) //Potential function
+/*double potential(double x, double y, double z) //Potential function
 {
   return -1.0/sqrt(x*x+y*y+z*z);
-}
+}*/
 
 normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 {
@@ -225,7 +225,7 @@ void optimalTest() //For -1/r well
       double rad = sqrt(particles[i].x*particles[i].x + particles[i].y*particles[i].y + particles[i].z*particles[i].z);
       double v2 = particles[i].vx*particles[i].vx + particles[i].vy*particles[i].vy + particles[i].vz*particles[i].vz;
       double totE = mass*potential(particles[i].x, particles[i].y, particles[i].z) + 0.5*mass*v2;
-      double maxR = -mass/totE;
+      double maxR = -mass/totE/2;
       if(maxR>=0) counter++;
       else continue;
       //cout<<maxR<<endl;
