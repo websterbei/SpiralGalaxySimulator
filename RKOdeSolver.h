@@ -8,16 +8,16 @@
 
 const double a = 1.0;
 //con[0] first constant 2/m, con[1] con[2] other coordinates
-/*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+/*void deri(double dydt[], double y[], double con[], bool x) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
 {
     dydt[0] = y[1];
-    dydt[1] = -con[0]*y[0]/10000*exp(-(y[0]*y[0]+con[1]*con[1]+con[2]*con[2])/10000);
+    dydt[1] = -con[0]*y[0]/1000*exp(-(y[0]*y[0]+con[1]*con[1]+con[2]*con[2])/1000);
 }*/
 
-/*void deri(double dydt[], double y[], double con[]) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
+/*void deri(double dydt[], double y[], double con[], double x) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'
 {
     dydt[0] = y[1];
-    dydt[1] = -con[0]*y[0];
+    dydt[1] = -con[0]*y[0]*sqrt(1000);
 }*/
 
 void deri(double dydt[], double y[], double con[], bool x) //dydt[0] y', dydt[1] y'', y[0] old y, y[1] old y'

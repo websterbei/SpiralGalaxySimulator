@@ -34,7 +34,7 @@ KentSampler getKent(double x, double y, double z, double k);
 void printToFile(string fname);
 void singleTest(ofstream *file);
 void totAngMom(double z[]);
-void optimalTest();
+double optimalTest();
 void avgKEPE(double *Kinetic, double *Potential);
 void RK4Thread(int start, int end, double stepSize);
 double totE();
@@ -71,6 +71,7 @@ int main()
     double tmpV[3];
     double scaleV = unif(gen);
     kent.next(tmpV);
+    //cout<<maxV*scaleV<<endl;
     particles[i].setParticle(tmpX, tmpY, tmpZ, maxV*tmpV[0]*scaleV, maxV*tmpV[1]*scaleV, maxV*tmpV[2]*scaleV);
     particles[i].setRadius(r);
     particles[i].setMass(mass);
@@ -92,8 +93,16 @@ int main()
   int oldNCollision = 0;
   double oldTE =0;
   thread thrd[nThread];
-  ofstream test;
-  test.open("output.txt");
+  ofstream energyDecrease;
+  ofstream angMomCons;
+  ofstream denergyChange;
+  ofstream diskness;
+  energyDecrease.open("energyDecrease.txt");
+  angMomCons.open("angMomCons.txt");
+  denergyChange.open("denergyChange.txt");
+  diskness.open("diskness.txt");
+
+  int progressCounter = 0;
 
   while(t<tEnd)
   {
@@ -105,13 +114,14 @@ int main()
       string fname = "./pics/multiSim" + to_string(stepCounter/avgStepSep);
       printToFile(fname);
       double z[3];
-      //totAngMom(z);
-      //cout<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
-      //optimalTest();
-      //cout<<nCollision - oldNCollision<<endl;
-      //oldNCollision = nCollision;
-      cout<<totE()-oldTE<<endl;
+      totAngMom(z);
+      angMomCons<<z[0]<<" "<<z[1]<<" "<<z[2]<<endl;
+      diskness<<optimalTest()<<endl;
+      double curE = totE();
+      denergyChange<<curE-oldTE<<endl;
       oldTE=totE();
+      energyDecrease<<curE<<endl;
+      cout<<progressCounter++<<endl;
       //double KE,PE;
       //avgKEPE(&KE, &PE);
       //cout<<KE*2<<" "<<PE<<endl;
@@ -142,24 +152,30 @@ int main()
     t+=stepSize;
     stepCounter++;
   }
-  test.close();
+
+  energyDecrease.close();
+  angMomCons.close();
+  denergyChange.close();
+  diskness.close();
   cout<<nCollision<<endl;
+
   return 0;
 }
 
+
 /*double potential(double x, double y, double z) //Potential function
 {
-  return -exp(-(x*x+y*y+z*z));
+  return -exp(-(x*x+y*y+z*z)/1000);
 }*/
 
 /*double potential(double x, double y, double z) //Potential function
 {
-  return a*(x*x+y*y+z*z)-1000;
+  return a*((x*x+y*y+z*z)*1000)-100000;
 }*/
 
 double potential(double x, double y, double z) //Potential function
 {
-  return -1.0/sqrt(x*x+y*y+z*z);
+  return -1.0/sqrt(x*x/4+y*y+z*z);
 }
 
 normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
@@ -222,7 +238,7 @@ void singleTest(ofstream *file)
   }
 }
 
-void optimalTest() //For -1/r well
+double optimalTest() //For -1/r well
 {
   double optimFactor = 0.0;
   int counter = 0;
@@ -231,15 +247,14 @@ void optimalTest() //For -1/r well
       double rad = sqrt(particles[i].x*particles[i].x + particles[i].y*particles[i].y + particles[i].z*particles[i].z);
       double v2 = particles[i].vx*particles[i].vx + particles[i].vy*particles[i].vy + particles[i].vz*particles[i].vz;
       double totE = mass*potential(particles[i].x, particles[i].y, particles[i].z) + 0.5*mass*v2;
-      double maxR = -mass/totE/2;
+      double maxR = 0.0;
+      //double maxR = -mass/totE/2; //-1/r
       if(maxR>=0) counter++;
       else continue;
-      //cout<<maxR<<endl;
       double lZ = particles[i].x*particles[i].vy-particles[i].vx*particles[i].y;
-      //cout<<totE-potential(maxR, 0, 0)<<endl;
-      optimFactor+=lZ/maxR/sqrt(2*(totE/mass-potential(maxR, 0, 0)));
+      //optimFactor+=lZ/maxR/sqrt(2*(totE/mass-potential(maxR, 0, 0))); //-1/r
     }
-    cout<<optimFactor/counter<<endl;
+    return optimFactor/counter;
 }
 
 void avgKEPE(double *Kinetic, double *Potential) //Average kinetic energy
