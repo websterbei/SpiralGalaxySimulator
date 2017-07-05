@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import sys
 
 n = int(sys.argv[1])
+scale = 500000;
 
 def plotter(fname):
     xs = []
@@ -28,17 +29,17 @@ def plotter(fname):
     ax.scatter(xs[:plotEnd],ys[:plotEnd], s=1)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.axis([-100, 100, -100, 100])
+    ax.axis([-scale, scale, -scale, scale])
     ax = fig.add_subplot(2, 2, 3)
     ax.scatter(xs[:plotEnd],zs[:plotEnd], s=1)
     ax.set_xlabel("x")
     ax.set_ylabel("z")
-    ax.axis([-100, 100, -100, 100])
+    ax.axis([-scale, scale, -scale, scale])
     ax = fig.add_subplot(2, 2, 4)
     ax.scatter(ys[:plotEnd],zs[:plotEnd], s=1)
     ax.set_xlabel("y")
     ax.set_ylabel("z")
-    ax.axis([-100, 100, -100, 100])
+    ax.axis([-scale, scale, -scale, scale])
 
     plt.savefig(fname.rstrip("txt"))
 

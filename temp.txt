@@ -1,0 +1,1 @@
+Number of particles: Radius of gas cloud: Coefficient of restitution: Number of snapshots: 0
