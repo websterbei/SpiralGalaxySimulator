@@ -36,7 +36,7 @@ int nCollision = 0;
 int R = 500000; //Radius of gas cloud
 int nPic = 10; //Number of figs generated
 double lambda = 1.0; //Coefficient of restitution
-double tEnd = 5000000000;
+double tEnd = 100000000;
 double stepSize = 10000;
 double mass = 1;
 double rvalues [1000002];
@@ -128,7 +128,7 @@ int main(int argc, char** argv)
     ifstream configFile;
     configFile.open(argv[2]);
     configFile>>n>>lambda>>t>>nCollision>>nPic;
-    particles = vector<Particle>(n/10);
+    particles = vector<Particle>(n);
     uniform_real_distribution<double> unif = getUnif();
     mt19937 gen(time(nullptr));
     double tmp;
