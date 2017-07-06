@@ -15,7 +15,7 @@ using namespace std;
 const double rmax = 1000000;
 int nsteps =  1 + (int)(rmax/1);//nsteps = 1 +(int)(rmax/dr);
 double dr = rmax/(nsteps-1);
-const double A0 = 1, A2 = -1;
+const double A0 = 1, A2 = -0.5;
 const double waveLength0 = 2000, waveLength2 = 1990;
 const double k0 = 2 * PI/waveLength0, k2 = 2 * PI/waveLength2;
 const double patternPeriod = 50000000;
@@ -128,15 +128,23 @@ int main(int argc, char** argv)
     ifstream configFile;
     configFile.open(argv[2]);
     configFile>>n>>lambda>>t>>nCollision>>nPic;
-    particles = vector<Particle>(n);
+    particles = vector<Particle>(n/10);
+    uniform_real_distribution<double> unif = getUnif();
+    mt19937 gen(time(nullptr));
+    double tmp;
     for(int i=0;i<n;i++)
     {
       configFile>>particles[i].x>>particles[i].y>>particles[i].z>>\
-      particles[i].vx>>particles[i].vy>>particles[i].vz>>particles[i].index;
+      particles[i].vx>>particles[i].vy>>particles[i].vz>>tmp>>particles[i].index;
+      //if(i%2==0) particles[i].vx+=particles[i].vx/2;
+      //else particles[i].vx-=particles[i].vx/2;
+      //if(i%2==0) particles[i].vy+=particles[i].vy/2;
+      //else particles[i].vy-=particles[i].vy/2;
+
       particles[i].setRadius(r);
       particles[i].setMass(mass);
     }
-    tEnd+=tEnd;
+    tEnd=tEnd+t;
     potentialGenerator();
   }
 
@@ -174,7 +182,7 @@ int main(int argc, char** argv)
     }
 
     //Collision
-    nCollision += collide(&particles, lambda);
+    //nCollision += collide(&particles, lambda);
 
     for(int i=0;i<n;i++)
     {
@@ -238,7 +246,7 @@ normal_distribution<double> getNorm(double sigma) //Require the std dev sigma
 
 uniform_real_distribution<double> getUnif() //Obtain a uniform real distribution
 {
-  uniform_real_distribution<double> distribution(0.0, 0.5);
+  uniform_real_distribution<double> distribution(0.0, 1.0);
   return distribution;
 }
 
